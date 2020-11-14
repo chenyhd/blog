@@ -3,11 +3,23 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://chenyhd.github.io/blog/posts/%E6%84%9F%E6%83%85/</loc>
+  </url>
+  
+  <url>
+    <loc>https://chenyhd.github.io/blog/posts/%E9%A9%BE%E8%80%83/</loc>
+  </url>
+  
+  <url>
     <loc>https://chenyhd.github.io/blog/categories/</loc>
   </url>
   
   <url>
     <loc>https://chenyhd.github.io/blog/</loc>
+  </url>
+  
+  <url>
+    <loc>https://chenyhd.github.io/blog/posts/</loc>
   </url>
   
   <url>
