@@ -3,23 +3,26 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://chenyhd.github.io/blog/posts/%E6%84%9F%E6%83%85/</loc>
-  </url>
-  
-  <url>
-    <loc>https://chenyhd.github.io/blog/posts/%E9%A9%BE%E8%80%83/</loc>
-  </url>
-  
-  <url>
-    <loc>https://chenyhd.github.io/blog/categories/</loc>
-  </url>
-  
-  <url>
     <loc>https://chenyhd.github.io/blog/</loc>
+    <lastmod>2020-12-20T19:12:21+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://chenyhd.github.io/blog/posts/</loc>
+    <lastmod>2020-12-20T19:12:21+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://chenyhd.github.io/blog/posts/%E8%80%83%E9%A9%BE%E7%85%A7/</loc>
+    <lastmod>2020-12-20T19:12:21+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://chenyhd.github.io/blog/archives/</loc>
+  </url>
+  
+  <url>
+    <loc>https://chenyhd.github.io/blog/categories/</loc>
   </url>
   
   <url>
