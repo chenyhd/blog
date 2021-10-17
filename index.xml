@@ -6,10 +6,17 @@
     <description>Recent content on Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 23 Dec 2020 22:49:14 +0800</lastBuildDate>
-    
-	<atom:link href="https://chenyhd.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Sun, 17 Oct 2021 20:45:24 +0800</lastBuildDate><atom:link href="https://chenyhd.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>实用软件收录</title>
+      <link>https://chenyhd.github.io/blog/posts/%E5%AE%9E%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%94%B6%E5%BD%95/</link>
+      <pubDate>Sun, 17 Oct 2021 20:45:24 +0800</pubDate>
+      
+      <guid>https://chenyhd.github.io/blog/posts/%E5%AE%9E%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%94%B6%E5%BD%95/</guid>
+      <description>显示按键记录: Carnac
+ 网址: https://github.com/Code52/carnac 描述: 可以在屏幕制定位置显示按键的记录  录制 Gif ShareX
+ 网址: https://getsharex.com/ 描述: 除了录制 Gif 之外，区域截图，滚动截图等都支持,需要注意，默认是打开上传图片的功能的，使用之前如果介意可以先关闭，  截图后动作 -&amp;gt; 上传照片  </description>
+    </item>
     
     <item>
       <title>《你干嘛在乎别人怎么想？》</title>
