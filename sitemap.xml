@@ -3,8 +3,10 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://chenyhd.github.io/blog/</loc>
+    <lastmod>2022-02-19T14:33:32+08:00</lastmod>
   </url><url>
     <loc>https://chenyhd.github.io/blog/posts/</loc>
+    <lastmod>2022-02-19T14:33:32+08:00</lastmod>
   </url><url>
     <loc>https://chenyhd.github.io/blog/posts/%E5%AE%9E%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%94%B6%E5%BD%95/</loc>
   </url><url>
@@ -16,6 +18,9 @@
     <lastmod>2020-12-20T21:54:53+08:00</lastmod>
   </url><url>
     <loc>https://chenyhd.github.io/blog/categories/</loc>
+  </url><url>
+    <loc>https://chenyhd.github.io/blog/posts/debug/</loc>
+    <lastmod>2022-02-19T14:33:32+08:00</lastmod>
   </url><url>
     <loc>https://chenyhd.github.io/blog/tags/</loc>
   </url>
