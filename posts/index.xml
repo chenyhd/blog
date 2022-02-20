@@ -13,7 +13,7 @@
       <pubDate>Sun, 17 Oct 2021 20:45:24 +0800</pubDate>
       
       <guid>https://chenyhd.github.io/blog/posts/%E5%AE%9E%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%94%B6%E5%BD%95/</guid>
-      <description>收录一些我认为比较好用的软件，希望能帮助到大家</description>
+      <description>偶尔使用的软件</description>
     </item>
     
     <item>
@@ -32,6 +32,15 @@
       
       <guid>https://chenyhd.github.io/blog/posts/%E8%80%83%E9%A9%BE%E7%85%A7/</guid>
       <description>用信誉很容易解决的事情非要选择当无赖</description>
+    </item>
+    
+    <item>
+      <title>debug</title>
+      <link>https://chenyhd.github.io/blog/posts/debug/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://chenyhd.github.io/blog/posts/debug/</guid>
+      <description>For debug</description>
     </item>
     
   </channel>
