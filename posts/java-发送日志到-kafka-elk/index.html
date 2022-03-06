@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>Java 发送日志到 Kafka， ELK - Blog</title>
+
+<meta name="keywords" content="" />
+<meta name="description" content="Springboot 将日至发送到 Kafka, 再存到 ELK 中">
+<meta name="author" content="">
+<link rel="canonical" href="https://chenyhd.github.io/blog/posts/java-%E5%8F%91%E9%80%81%E6%97%A5%E5%BF%97%E5%88%B0-kafka-elk/" />
+<link href="https://chenyhd.github.io/blog/assets/css/stylesheet.min.1ace6398e34c6bef28526a6ce8076fe3775484964f3b77b2bfb05bfcc4797ec8.css" integrity="sha256-Gs5jmONMa&#43;8oUmps6Adv43dUhJZPO3eyv7Bb/MR5fsg=" rel="preload stylesheet"
+    as="style">
+
+<link rel="manifest" href="https://chenyhd.github.io/blog/site.webmanifest">
+<link rel="icon" href="https://chenyhd.github.io/blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chenyhd.github.io/blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chenyhd.github.io/blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://chenyhd.github.io/blog/apple-touch-icon.png">
+<link rel="mask-icon" href="https://chenyhd.github.io/blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<meta name="generator" content="Hugo 0.92.2" />
+
+
+
+
+</head>
+
+<body class="single" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+<noscript>
+    <style type="text/css">
+        .theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chenyhd.github.io/blog" accesskey="h">Blog</a>
+            <span class="logo-switches">
+                <span class="theme-toggle">
+                    <a id="theme-toggle" accesskey="t">
+                        <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </a>
+                </span>
+                
+            </span>
+        </div>
+        <ul class="menu" id="menu" onscroll="menu_on_scroll()"></ul>
+    </nav>
+</header>
+
+    <main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">
+      Java 发送日志到 Kafka， ELK
+    </h1>
+    <div class="post-meta">March 6, 2022
+
+    </div>
+  </header> 
+
+  <div class="post-content">
+<h3 id="目标">目标<a hidden class="anchor" aria-hidden="true" href="#目标">#</a></h3>
+<p>Java 应用将日志发送到 Kafka， Logstash 再从 Kafka 中拉取日志存到 Elasticsearch 中</p>
+<h3 id="流程">流程<a hidden class="anchor" aria-hidden="true" href="#流程">#</a></h3>
+<p>Java =&gt; Kafka =&gt; Logstash =&gt; Elesticsearch</p>
+<h3 id="安装-elk">安装 ELK<a hidden class="anchor" aria-hidden="true" href="#安装-elk">#</a></h3>
+<p>使用 docker compose 启动一整套的 ELK, 参考: <a href="https://github.com/deviantony/docker-elk.git">docker-elk</a></p>
+<h3 id="安装-kafka-和-kafka-web-ui">安装 Kafka 和 Kafka web UI<a hidden class="anchor" aria-hidden="true" href="#安装-kafka-和-kafka-web-ui">#</a></h3>
+<p>使用 docker compose 启动一整套的 Kafka, 参考: <a href="https://github.com/bitnami/bitnami-docker-kafka">bitnami-docker-kafka</a>,
+安装 <a href="https://github.com/provectus/kafka-ui">kafka-ui</a> 方便调试</p>
+<h3 id="将容器的网络连接连接起来">将容器的网络连接连接起来<a hidden class="anchor" aria-hidden="true" href="#将容器的网络连接连接起来">#</a></h3>
+<p>每个 docker compose 都有自己的网络，我们需要创建一个通用网络让 Kafka，ELK，Kafka UI 之间可以相互访问。</p>
+<p>创建网络</p>
+<pre tabindex="0"><code>docker network create dockerNetwork
+</code></pre><p>将以上所有容器就加入到这个网络中, 容器的名字可以通过 <code>docker ps</code> 查看</p>
+<pre tabindex="0"><code>docker network connect dockerNetwork elasticsearch_container_name
+docker network connect dockerNetwork logstash_container_name
+docker network connect dockerNetwork kibana_container_name
+docker network connect dockerNetwork kafka_container_name
+docker network connect dockerNetwork kafka-ui__container_name
+</code></pre><p>网络连接之后，container 的相互访问可以用对方 IP 或者 name， 建议使用 name. name 为 docker compose 文件中的 services 节点或者 container 的名字</p>
+<blockquote>
+<p>You can connect multiple containers to the same network. Once connected, the containers can communicate using only another container’s IP address or name.</p>
+</blockquote>
+<h4 id="kafka-访问配置">kafka 访问配置<a hidden class="anchor" aria-hidden="true" href="#kafka-访问配置">#</a></h4>
+<p>kafka 默认之允许内部访问，docker container 在同一网络下属于内部访问，在测试时我们需要通过主机访问到 docker 内部，所以需要打开外部访问</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"> <span style="color:#f92672">kafka</span>:
+    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">docker.io/bitnami/kafka:3</span>
+    <span style="color:#f92672">ports</span>:
+      - <span style="color:#e6db74">&#34;9092:9092&#34;</span>
+      - <span style="color:#e6db74">&#34;9093:9093&#34;</span>
+    <span style="color:#f92672">volumes</span>:
+      - <span style="color:#e6db74">&#34;kafka_data:/bitnami&#34;</span>
+    <span style="color:#f92672">environment</span>:
+      - <span style="color:#ae81ff">KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181</span>
+      - <span style="color:#ae81ff">ALLOW_PLAINTEXT_LISTENER=yes</span>
+      <span style="color:#75715e"># 支持访问的方式</span>
+      - <span style="color:#ae81ff">KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT</span>
+      <span style="color:#75715e"># 为内部访问和外部访问设置不同的端口</span>
+      - <span style="color:#ae81ff">KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093</span>
+      <span style="color:#75715e"># 内部访问的 host 和 外部访问的 host</span>
+      - <span style="color:#ae81ff">KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093</span>
+      - <span style="color:#ae81ff">KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT</span>
+</code></pre></div><h4 id="kafka-ui-配置">kafka UI 配置<a hidden class="anchor" aria-hidden="true" href="#kafka-ui-配置">#</a></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">services</span>:
+  <span style="color:#f92672">kafka-ui</span>:
+    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">provectuslabs/kafka-ui</span>
+    <span style="color:#f92672">container_name</span>: <span style="color:#ae81ff">kafka-ui</span>
+    <span style="color:#f92672">ports</span>:
+      - <span style="color:#e6db74">&#34;8800:8080&#34;</span>
+    <span style="color:#75715e"># restart: always</span>
+    <span style="color:#f92672">environment</span>:
+      - <span style="color:#ae81ff">KAFKA_CLUSTERS_0_NAME=local1</span>
+      <span style="color:#75715e"># 由于加入到同一网络所以使用 9092 端口访问</span>
+      - <span style="color:#ae81ff">KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092</span>
+      - <span style="color:#ae81ff">KAFKA_CLUSTERS_0_ZOOKEEPER=kafka_zookeeper_1:2181</span>
+</code></pre></div><h3 id="logstash-配置">Logstash 配置<a hidden class="anchor" aria-hidden="true" href="#logstash-配置">#</a></h3>
+<p>Logstash 需要从 kafka 拉去信息然后保存到 elasticsearch 中, 只需要设置相关的 pipeline 即可。</p>
+<p>因为</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">input {
+  kafka{
+    codec =&gt; json
+    # kafka 连接信息
+    bootstrap_servers =&gt; &quot;kafka:9092&quot;
+    # kafka topic
+    topics =&gt; [&quot;java-log&quot;]
+  }
+}
+
+
+# 过滤器，因为发送日志为 json 格式并不需要做特殊的处理， add_field 表示在发送的 json 基础上再添加额外的字段，可能会导致重复,remove_field 表示排除字段
+filter {
+    mutate {
+      #add_field =&gt; {
+      #  &quot;level&quot; =&gt; &quot;%{[level]}&quot;
+      #}
+      #add_field =&gt; {
+      #  &quot;message&quot; =&gt; &quot;%{[message]}&quot;
+      #}
+      #
+      #remove_field =&gt; [&quot;data&quot;, &quot;@version&quot;, &quot;@timestamp&quot;,  &quot;event&quot;, &quot;globalId&quot;]
+    }
+}
+
+output {
+  stdout {
+        codec =&gt; json_lines
+    }
+  elasticsearch {
+      # elastic 连接信息
+      hosts =&gt; [&quot;elasticsearch:9200&quot;]
+      # 将日志存在在哪个队列里
+      index =&gt; &quot;java_log&quot;
+      # 用户名
+      user =&gt; &quot;elastic&quot;
+      # 密码
+      password =&gt; &quot;xxxxx&quot;
+      # document_id =&gt; &quot;%{id}&quot;
+  }
+}
+</code></pre><h3 id="spring-cloud">Spring Cloud<a hidden class="anchor" aria-hidden="true" href="#spring-cloud">#</a></h3>
+<p>我们需要将日志发送到 kafka，所以只要找到可以发送日志到 kafka 的 Appender 即可。 Apache 官方提供的是 Log4j 并且提供了稳定版本。 Logback 也有对应的支持，但是是非官方支持。本次将会使用 log4j 将日志发送到 kafka.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-gradle" data-lang="gradle">dependencies <span style="color:#f92672">{</span>
+	implementation <span style="color:#e6db74">&#39;org.springframework.boot:spring-boot-starter-web&#39;</span>
+	<span style="color:#75715e">// 使用 log4j
+</span><span style="color:#75715e"></span>	implementation <span style="color:#e6db74">&#39;org.springframework.boot:spring-boot-starter-log4j2&#39;</span>
+	<span style="color:#75715e">// 支持将日志发送到 kafka 的 appender
+</span><span style="color:#75715e"></span>	implementation <span style="color:#e6db74">&#39;org.apache.kafka:kafka-log4j-appender:3.1.0&#39;</span>
+    <span style="color:#75715e">// 可以在 log4j 的文件中读取 spring 中的变量信息
+</span><span style="color:#75715e"></span>	implementation <span style="color:#e6db74">&#39;org.apache.logging.log4j:log4j-spring-boot:2.17.0&#39;</span>
+    <span style="color:#75715e">// 日志追踪， 日志增加 traceId,spanId 等信息
+</span><span style="color:#75715e"></span>	implementation<span style="color:#e6db74">&#39;org.springframework.cloud:spring-cloud-starter-sleuth&#39;</span>
+	testImplementation <span style="color:#e6db74">&#39;org.springframework.boot:spring-boot-starter-test&#39;</span>
+<span style="color:#f92672">}</span>
+
+configurations <span style="color:#f92672">{</span>
+    all <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// 将默认的 logback 配置排除掉
+</span><span style="color:#75715e"></span>		exclude group: <span style="color:#e6db74">&#39;org.springframework.boot&#39;</span><span style="color:#f92672">,</span> module: <span style="color:#e6db74">&#39;spring-boot-starter-logging&#39;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><code>log4j2-spring.xml</code> 配置</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">  <span style="color:#75715e">&lt;!-- 从 spring 配置文件中获取服务应用信息 --&gt;</span>
+  <span style="color:#f92672">&lt;Properties&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;applicationName&#34;</span><span style="color:#f92672">&gt;</span>${spring:spring.application.name}<span style="color:#f92672">&lt;/property&gt;</span>
+  <span style="color:#f92672">&lt;/Properties&gt;</span>
+
+  <span style="color:#f92672">&lt;Appenders&gt;</span>
+    
+     <span style="color:#75715e">&lt;!-- 支持 Kafka 的 appender, topic 为 kafka 的 topic   --&gt;</span>
+     <span style="color:#f92672">&lt;Kafka</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;kafkaLogAppender&#34;</span> <span style="color:#a6e22e">topic=</span><span style="color:#e6db74">&#34;java-log&#34;</span><span style="color:#f92672">&gt;</span>
+            <span style="color:#75715e">&lt;!-- 将日志转成 json 格式，并增加一些自定义字段 --&gt;</span>
+            <span style="color:#f92672">&lt;JSONLayout&gt;</span>
+                <span style="color:#f92672">&lt;KeyValuePair</span> <span style="color:#a6e22e">key=</span><span style="color:#e6db74">&#34;applicationName&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${applicationName}&#34;</span><span style="color:#f92672">/&gt;</span>
+                <span style="color:#f92672">&lt;KeyValuePair</span> <span style="color:#a6e22e">key=</span><span style="color:#e6db74">&#34;host&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${env:hostName}&#34;</span><span style="color:#f92672">/&gt;</span>
+                <span style="color:#f92672">&lt;KeyValuePair</span> <span style="color:#a6e22e">key=</span><span style="color:#e6db74">&#34;spanId&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${ctx:spanId}&#34;</span><span style="color:#f92672">/&gt;</span>
+                <span style="color:#f92672">&lt;KeyValuePair</span> <span style="color:#a6e22e">key=</span><span style="color:#e6db74">&#34;traceId&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${ctx:traceId}&#34;</span><span style="color:#f92672">/&gt;</span>
+            <span style="color:#f92672">&lt;/JSONLayout&gt;</span>
+            <span style="color:#75715e">&lt;!-- kafka 的连接信息，因为是从外部访问，所以使用 9093 端口 --&gt;</span>            
+            <span style="color:#f92672">&lt;Property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;bootstrap.servers&#34;</span><span style="color:#f92672">&gt;</span>127.0.0.1:9093<span style="color:#f92672">&lt;/Property&gt;</span>
+        <span style="color:#f92672">&lt;/Kafka&gt;</span>
+  <span style="color:#f92672">&lt;/Appenders&gt;</span>
+</code></pre></div><p>Java 生成日志信息</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> org.slf4j.Logger<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.slf4j.LoggerFactory<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.boot.SpringApplication<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.boot.autoconfigure.SpringBootApplication<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.web.bind.annotation.PathVariable<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RequestMapping<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RestController<span style="color:#f92672">;</span>
+
+<span style="color:#a6e22e">@SpringBootApplication</span>
+<span style="color:#a6e22e">@RestController</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DemoApplication</span> <span style="color:#f92672">{</span>
+
+	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Logger logger <span style="color:#f92672">=</span> LoggerFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">getLogger</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">());</span>
+
+	<span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/&#34;</span><span style="color:#f92672">)</span>
+	<span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">home</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+		logger<span style="color:#f92672">.</span><span style="color:#a6e22e">error</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;-------------&#34;</span> <span style="color:#f92672">);</span>
+		<span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Hello Docker World&#34;</span><span style="color:#f92672">;</span>
+	<span style="color:#f92672">}</span>
+
+	<span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;error/{message}&#34;</span><span style="color:#f92672">)</span>
+	<span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">error</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathVariable</span> String message<span style="color:#f92672">){</span>
+		<span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NullPointerException<span style="color:#f92672">(</span>message<span style="color:#f92672">);</span>
+	<span style="color:#f92672">}</span>
+
+	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+		SpringApplication<span style="color:#f92672">.</span><span style="color:#a6e22e">run</span><span style="color:#f92672">(</span>DemoApplication<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> args<span style="color:#f92672">);</span>
+	<span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span>
+
+</code></pre></div><h4 id="测试和验证">测试和验证<a hidden class="anchor" aria-hidden="true" href="#测试和验证">#</a></h4>
+<p>触发接口:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl http://127.0.0.1:8080/
+</code></pre></div><p>kafka 队列中收到的消息</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+	<span style="color:#f92672">&#34;instant&#34;</span>: {
+		<span style="color:#f92672">&#34;epochSecond&#34;</span>: <span style="color:#ae81ff">1646562171</span>,
+		<span style="color:#f92672">&#34;nanoOfSecond&#34;</span>: <span style="color:#ae81ff">8000000</span>
+	},
+	<span style="color:#f92672">&#34;thread&#34;</span>: <span style="color:#e6db74">&#34;http-nio-8080-exec-2&#34;</span>,
+	<span style="color:#f92672">&#34;level&#34;</span>: <span style="color:#e6db74">&#34;ERROR&#34;</span>,
+	<span style="color:#f92672">&#34;loggerName&#34;</span>: <span style="color:#e6db74">&#34;com.chenyh.demo.DemoApplication$$EnhancerBySpringCGLIB$$8910fe62&#34;</span>,
+	<span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;-------------&#34;</span>,
+	<span style="color:#f92672">&#34;endOfBatch&#34;</span>: <span style="color:#66d9ef">false</span>,
+	<span style="color:#f92672">&#34;loggerFqcn&#34;</span>: <span style="color:#e6db74">&#34;org.apache.logging.slf4j.Log4jLogger&#34;</span>,
+	<span style="color:#f92672">&#34;threadId&#34;</span>: <span style="color:#ae81ff">32</span>,
+	<span style="color:#f92672">&#34;threadPriority&#34;</span>: <span style="color:#ae81ff">5</span>,
+	<span style="color:#f92672">&#34;applicationName&#34;</span>: <span style="color:#e6db74">&#34;kafka-elk&#34;</span>,
+	<span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;ubuntu-xxxx&#34;</span>,
+	<span style="color:#f92672">&#34;hostIp&#34;</span>: <span style="color:#e6db74">&#34;${hostIp}&#34;</span>, <span style="color:#75715e">// 没有解析出来，我也每找到 IP 对应的变量是什么
+</span><span style="color:#75715e"></span>	<span style="color:#f92672">&#34;spanId&#34;</span>: <span style="color:#e6db74">&#34;7d5d9ab319cedd53&#34;</span>,
+	<span style="color:#f92672">&#34;traceId&#34;</span>: <span style="color:#e6db74">&#34;7d5d9ab319cedd53&#34;</span>
+}
+</code></pre></div><p>elasticsearch中的效果
+<img src="/blog/images/elasticsearch-log.png" alt=""></p>
+<h3 id="参考">参考<a hidden class="anchor" aria-hidden="true" href="#参考">#</a></h3>
+<ul>
+<li><a href="https://github.com/deviantony/docker-elk">docer-elk</a></li>
+<li><a href="https://github.com/bitnami/bitnami-docker-kafka">kafka docker</a></li>
+<li><a href="https://github.com/provectus/kafka-ui">Kafka UI</a></li>
+<li><a href="https://github.com/freemansoft/spring-boot-log-to-kafka-example">springboot kafka example</a></li>
+<li><a href="https://logging.apache.org/log4j/2.0/manual/lookups.html">log4j lookup</a></li>
+<li><a href="https://docs.docker.com/engine/reference/commandline/network_create/">docker network create</a></li>
+<li><a href="https://docs.docker.com/engine/reference/commandline/network_connect/">docker network connect</a></li>
+<li><a href="https://www.devglan.com/apache-kafka/stream-log4j-logs-to-kafka">java send log to kafka</a></li>
+<li><a href="https://spring.io/projects/spring-cloud-sleuth">spring cloud sleuth</a></li>
+</ul>
+
+</div>
+  <footer class="post-footer">
+  </footer>
+</article>
+    </main><footer class="footer">
+    <span>&copy; 2022 <a href="https://chenyhd.github.io/blog">Blog</a></span>
+    <span>&middot;</span>
+    <span>Powered by <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a></span>
+    <span>&middot;</span>
+    <span>Theme <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a></span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top" accesskey="g">
+    <button class="top-link" id="top-link" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6">
+            <path d="M12 6H0l6-6z" /></svg>
+    </button>
+</a>
+
+
+<script src="https://chenyhd.github.io/blog/assets/js/highlight.min.727bc06f35142445e1ca4dbf0c258372d440dfd30ea831e99dbe7bf9e54d11da.js" integrity="sha256-cnvAbzUUJEXhyk2/DCWDctRA39MOqDHpnb57&#43;eVNEdo="></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>
+    window.onload = function () {
+        if (localStorage.getItem("menu-scroll-position")) {
+            document.getElementById('menu').scrollLeft = localStorage.getItem("menu-scroll-position");
+        }
+    }
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            document.querySelector(`[id='${id}']`).scrollIntoView({
+                behavior: "smooth"
+            });
+        });
+    });
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+    function menu_on_scroll() {
+        localStorage.setItem("menu-scroll-position", document.getElementById('menu').scrollLeft);
+    }
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+</script>
+
+</body>
+
+</html>
