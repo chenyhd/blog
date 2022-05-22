@@ -6,7 +6,16 @@
     <description>Recent content on Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 06 Mar 2022 17:06:24 +0800</lastBuildDate><atom:link href="https://chenyhd.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 22 May 2022 22:55:14 +0800</lastBuildDate><atom:link href="https://chenyhd.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>双系统连接同一蓝牙设备， Windows 10, Ubuntu 21.10</title>
+      <link>https://chenyhd.github.io/blog/posts/%E5%8F%8C%E7%B3%BB%E7%BB%9F%E8%BF%9E%E6%8E%A5%E5%90%8C%E4%B8%80%E8%93%9D%E7%89%99%E8%AE%BE%E5%A4%87/</link>
+      <pubDate>Sun, 22 May 2022 22:55:14 +0800</pubDate>
+      
+      <guid>https://chenyhd.github.io/blog/posts/%E5%8F%8C%E7%B3%BB%E7%BB%9F%E8%BF%9E%E6%8E%A5%E5%90%8C%E4%B8%80%E8%93%9D%E7%89%99%E8%AE%BE%E5%A4%87/</guid>
+      <description>解决切换系统时需要，重新移除配对的问题</description>
+    </item>
+    
     <item>
       <title>Java 发送日志到 Kafka， ELK</title>
       <link>https://chenyhd.github.io/blog/posts/java-%E5%8F%91%E9%80%81%E6%97%A5%E5%BF%97%E5%88%B0-kafka-elk/</link>
@@ -50,15 +59,6 @@
       
       <guid>https://chenyhd.github.io/blog/archives/</guid>
       <description>archives</description>
-    </item>
-    
-    <item>
-      <title>双系统连接同一蓝牙设备， Windows 10, Ubuntu 21.10</title>
-      <link>https://chenyhd.github.io/blog/posts/%E5%8F%8C%E7%B3%BB%E7%BB%9F%E8%BF%9E%E6%8E%A5%E5%90%8C%E4%B8%80%E8%93%9D%E7%89%99%E8%AE%BE%E5%A4%87/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://chenyhd.github.io/blog/posts/%E5%8F%8C%E7%B3%BB%E7%BB%9F%E8%BF%9E%E6%8E%A5%E5%90%8C%E4%B8%80%E8%93%9D%E7%89%99%E8%AE%BE%E5%A4%87/</guid>
-      <description>解决切换系统时需要，重新移除配对的问题</description>
     </item>
     
   </channel>

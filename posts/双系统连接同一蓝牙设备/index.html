@@ -90,7 +90,7 @@
     <h1 class="post-title">
       双系统连接同一蓝牙设备， Windows 10, Ubuntu 21.10
     </h1>
-    <div class="post-meta">
+    <div class="post-meta">May 22, 2022
 
     </div>
   </header> 
@@ -147,7 +147,10 @@ Key=36AAAE69BBD2204A5A81255E9E4C1C00
 Type=4
 PINLength=0
 </code></pre><p>修改 <code>[LinkKey]</code> 下的 <code>Key</code> 成为 Windows 抄下来的连接 id（去除空格，共 32 位）</p>
-<p>修改后直接重启系统，两个系统都检查一下是否是直接连接上的</p>
+<p>5.重启蓝牙进程</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">systemctl restart bluetooth
+</code></pre></div><p>重启完后，蓝牙自动链接</p>
+<p>6.两个系统都检查一下是否是直接连接上的</p>
 <p>参考:</p>
 <ul>
 <li><a href="https://unix.stackexchange.com/questions/255509/bluetooth-pairing-on-dual-boot-of-windows-linux-mint-ubuntu-stop-having-to-p">Bluetooth Pairing on Dual Boot of Windows &amp; Linux Mint/Ubuntu - Stop having to Pair Devices</a></li>
