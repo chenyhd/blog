@@ -151,6 +151,18 @@ https://youtrack.jetbrains.com/issue/JBR-2444
 <li>OBS 虚拟摄像头只能打开一次问题解决</li>
 </ul>
 <pre tabindex="0"><code> https://github.com/obsproject/obs-studio/issues/4808#issuecomment-1108880336
+</code></pre><ul>
+<li>使用 zsh 后环境变量需要添加在 <code>~/.zshrc</code> 中，例如：</li>
+</ul>
+<pre tabindex="0"><code>export HTTP_PROXY=http://127.0.0.1:7890
+export HTTPS_PROXY=$HTTP_PROXY
+export PATH=$PATH:/usr/local/go/bin
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+
+
+eval &quot;$(starship init zsh)&quot;
+___MY_VMOPTIONS_SHELL_FILE=&quot;${HOME}/.jetbrains.vmoptions.sh&quot;; if [ -f &quot;${___MY_VMOPTIONS_SHELL_FILE}&quot; ]; then . &quot;${___MY_VMOPTIONS_SHELL_FILE}&quot;; fi
+
 </code></pre>
 </div>
   <footer class="post-footer">
