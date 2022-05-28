@@ -142,17 +142,16 @@
 <p>vim 文本编辑</p>
 <h2 id="问题解决">问题解决<a hidden class="anchor" aria-hidden="true" href="#问题解决">#</a></h2>
 <ul>
-<li>Jetbrain IDE 打中文会造成无法打字的情况</li>
+<li><a href="https://youtrack.jetbrains.com/issue/JBR-2444">Jetbrain IDE 打中文会造成无法打字的情况</a></li>
 </ul>
 <pre tabindex="0"><code> 在 xxx.vmproperteies 中添加 `-Drecreate.x11.input.method=true`
-
-https://youtrack.jetbrains.com/issue/JBR-2444
 </code></pre><ul>
-<li>OBS 虚拟摄像头只能打开一次问题解决</li>
-</ul>
-<pre tabindex="0"><code> https://github.com/obsproject/obs-studio/issues/4808#issuecomment-1108880336
-</code></pre><ul>
-<li>使用 zsh 后环境变量需要添加在 <code>~/.zshrc</code> 中，例如：</li>
+<li>
+<p><a href="https://github.com/obsproject/obs-studio/issues/4808#issuecomment-1108880336">OBS 虚拟摄像头只能打开一次问题解决</a></p>
+</li>
+<li>
+<p>使用 zsh 后环境变量需要添加在 <code>~/.zshrc</code> 中，例如：</p>
+</li>
 </ul>
 <pre tabindex="0"><code>export HTTP_PROXY=http://127.0.0.1:7890
 export HTTPS_PROXY=$HTTP_PROXY
@@ -163,7 +162,10 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 eval &quot;$(starship init zsh)&quot;
 ___MY_VMOPTIONS_SHELL_FILE=&quot;${HOME}/.jetbrains.vmoptions.sh&quot;; if [ -f &quot;${___MY_VMOPTIONS_SHELL_FILE}&quot; ]; then . &quot;${___MY_VMOPTIONS_SHELL_FILE}&quot;; fi
 
-</code></pre>
+</code></pre><ul>
+<li><a href="https://extensions.gnome.org/extension/4338/allow-locked-remote-desktop/">允许屏幕被锁定的情况下远程控制</a></li>
+</ul>
+
 </div>
   <footer class="post-footer">
   </footer>
